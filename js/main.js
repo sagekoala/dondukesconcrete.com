@@ -1,8 +1,7 @@
 /* ============================================
-   STAR CITY SEALANTS - Main JavaScript
+   DON DUKES CONCRETE - Main JavaScript
    ============================================ */
 
-// Wait for DOM to be ready
 document.addEventListener('DOMContentLoaded', () => {
     initHeader();
     initMobileMenu();
@@ -10,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initAboutTabs();
     initScrollAnimations();
     initContactButtons();
+    initContactForm();
 });
 
 /* ============================================
@@ -18,20 +18,10 @@ document.addEventListener('DOMContentLoaded', () => {
 function initHeader() {
     const header = document.querySelector('.header');
     if (!header) return;
-    
-    let lastScroll = 0;
-    
+
     window.addEventListener('scroll', () => {
-        const currentScroll = window.pageYOffset;
-        
-        if (currentScroll > 50) {
-            header.classList.add('header--scrolled');
-        } else {
-            header.classList.remove('header--scrolled');
-        }
-        
-        lastScroll = currentScroll;
-    });
+        header.classList.toggle('header--scrolled', window.pageYOffset > 50);
+    }, { passive: true });
 }
 
 /* ============================================
@@ -40,24 +30,20 @@ function initHeader() {
 function initMobileMenu() {
     const toggle = document.querySelector('.header__toggle');
     const nav = document.querySelector('.header__nav');
-    
     if (!toggle || !nav) return;
-    
+
     toggle.addEventListener('click', () => {
         toggle.classList.toggle('header__toggle--active');
         nav.classList.toggle('header__nav--open');
     });
-    
-    // Close menu when clicking a link
-    const navLinks = nav.querySelectorAll('.header__link');
-    navLinks.forEach(link => {
+
+    nav.querySelectorAll('.header__link').forEach(link => {
         link.addEventListener('click', () => {
             toggle.classList.remove('header__toggle--active');
             nav.classList.remove('header__nav--open');
         });
     });
-    
-    // Close menu when clicking outside
+
     document.addEventListener('click', (e) => {
         if (!toggle.contains(e.target) && !nav.contains(e.target)) {
             toggle.classList.remove('header__toggle--active');
@@ -75,76 +61,52 @@ function initGallery() {
     const prevBtn = document.querySelector('.gallery__btn--prev');
     const nextBtn = document.querySelector('.gallery__btn--next');
     const counter = document.querySelector('.gallery__counter');
-    
+
     if (!mainImage || thumbnails.length === 0) return;
-    
+
     let currentIndex = 0;
-    const totalImages = thumbnails.length;
-    
-    // Update counter display
+    const total = thumbnails.length;
+
     function updateCounter() {
-        if (counter) {
-            counter.textContent = `${currentIndex + 1} / ${totalImages}`;
-        }
+        if (counter) counter.textContent = `${currentIndex + 1} / ${total}`;
     }
-    
-    // Update active thumbnail
+
     function updateThumbnails() {
-        thumbnails.forEach((thumb, index) => {
-            thumb.classList.toggle('gallery__thumb--active', index === currentIndex);
+        thumbnails.forEach((thumb, i) => {
+            thumb.classList.toggle('gallery__thumb--active', i === currentIndex);
         });
     }
-    
-    // Change main image with fade effect
+
     function changeImage(index) {
-        if (index < 0) index = totalImages - 1;
-        if (index >= totalImages) index = 0;
-        
+        if (index < 0) index = total - 1;
+        if (index >= total) index = 0;
         currentIndex = index;
-        
-        // Fade out
+
         mainImage.style.opacity = '0';
-        
         setTimeout(() => {
             mainImage.src = thumbnails[currentIndex].querySelector('img').src;
             mainImage.style.opacity = '1';
         }, 150);
-        
+
         updateThumbnails();
         updateCounter();
+
+        // Scroll active thumbnail into view
+        thumbnails[currentIndex].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
     }
-    
-    // Thumbnail click
-    thumbnails.forEach((thumb, index) => {
-        thumb.addEventListener('click', () => {
-            changeImage(index);
-        });
+
+    thumbnails.forEach((thumb, i) => {
+        thumb.addEventListener('click', () => changeImage(i));
     });
-    
-    // Previous button
-    if (prevBtn) {
-        prevBtn.addEventListener('click', () => {
-            changeImage(currentIndex - 1);
-        });
-    }
-    
-    // Next button
-    if (nextBtn) {
-        nextBtn.addEventListener('click', () => {
-            changeImage(currentIndex + 1);
-        });
-    }
-    
-    // Keyboard navigation
+
+    if (prevBtn) prevBtn.addEventListener('click', () => changeImage(currentIndex - 1));
+    if (nextBtn) nextBtn.addEventListener('click', () => changeImage(currentIndex + 1));
+
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowLeft') {
-            changeImage(currentIndex - 1);
-        } else if (e.key === 'ArrowRight') {
-            changeImage(currentIndex + 1);
-        }
+        if (e.key === 'ArrowLeft') changeImage(currentIndex - 1);
+        else if (e.key === 'ArrowRight') changeImage(currentIndex + 1);
     });
-    
-    // Initialize
+
     updateThumbnails();
     updateCounter();
 }
@@ -155,22 +117,15 @@ function initGallery() {
 function initAboutTabs() {
     const tabs = document.querySelectorAll('.about-nav__item');
     const sections = document.querySelectorAll('.about-section');
-    
     if (tabs.length === 0 || sections.length === 0) return;
-    
+
     tabs.forEach((tab, index) => {
         tab.addEventListener('click', () => {
-            // Remove active from all tabs
             tabs.forEach(t => t.classList.remove('about-nav__item--active'));
-            // Add active to clicked tab
             tab.classList.add('about-nav__item--active');
-            
-            // Hide all sections
+
             sections.forEach(s => s.classList.remove('about-section--active'));
-            // Show corresponding section
-            if (sections[index]) {
-                sections[index].classList.add('about-section--active');
-            }
+            if (sections[index]) sections[index].classList.add('about-section--active');
         });
     });
 }
@@ -179,39 +134,31 @@ function initAboutTabs() {
    Scroll Animations
    ============================================ */
 function initScrollAnimations() {
-    const animatedElements = document.querySelectorAll('.animate-on-scroll, .stagger-children');
-    
-    if (animatedElements.length === 0) return;
-    
+    const elements = document.querySelectorAll('.animate-on-scroll, .stagger-children');
+    if (elements.length === 0) return;
+
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('is-visible');
             }
         });
-    }, {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    });
-    
-    animatedElements.forEach(el => observer.observe(el));
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    elements.forEach(el => observer.observe(el));
 }
 
 /* ============================================
-   Contact Buttons
+   Contact Buttons (redirect to contact page)
    ============================================ */
 function initContactButtons() {
-    const contactBtns = document.querySelectorAll('[data-contact]');
-    
-    contactBtns.forEach(btn => {
+    document.querySelectorAll('[data-contact]').forEach(btn => {
         btn.addEventListener('click', () => {
             window.location.href = './html/contact.html';
         });
     });
-    
-    // Also handle buttons on subpages
-    const subpageContactBtns = document.querySelectorAll('[data-contact-subpage]');
-    subpageContactBtns.forEach(btn => {
+
+    document.querySelectorAll('[data-contact-subpage]').forEach(btn => {
         btn.addEventListener('click', () => {
             window.location.href = './contact.html';
         });
@@ -219,16 +166,87 @@ function initContactButtons() {
 }
 
 /* ============================================
-   Utility: Debounce function
+   Contact Form
    ============================================ */
-function debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-    };
+function initContactForm() {
+    const form = document.getElementById('contactForm');
+    const successMsg = document.getElementById('formSuccess');
+    if (!form) return;
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        if (!validateForm(form)) return;
+
+        // Build mailto link and open it
+        const name    = form.name.value.trim();
+        const email   = form.email.value.trim();
+        const phone   = form.phone ? form.phone.value.trim() : '';
+        const service = form.service ? form.service.value : '';
+        const message = form.message.value.trim();
+
+        const serviceLabel = service
+            ? form.service.options[form.service.selectedIndex].text
+            : 'Not specified';
+
+        const body = [
+            `Name: ${name}`,
+            `Email: ${email}`,
+            phone ? `Phone: ${phone}` : null,
+            `Service: ${serviceLabel}`,
+            '',
+            `Message:`,
+            message,
+        ].filter(line => line !== null).join('\n');
+
+        const subject = encodeURIComponent(`Project Inquiry from ${name}`);
+        const bodyEncoded = encodeURIComponent(body);
+
+        window.location.href = `mailto:don@hondocrete.com?subject=${subject}&body=${bodyEncoded}`;
+
+        // Show success message
+        form.style.display = 'none';
+        if (successMsg) successMsg.style.display = 'block';
+    });
+}
+
+function validateForm(form) {
+    let valid = true;
+
+    const name = form.querySelector('#name');
+    const email = form.querySelector('#email');
+    const message = form.querySelector('#message');
+    const nameError = document.getElementById('nameError');
+    const emailError = document.getElementById('emailError');
+    const messageError = document.getElementById('messageError');
+
+    // Reset
+    [name, email, message].forEach(el => el && el.classList.remove('is-invalid'));
+    [nameError, emailError, messageError].forEach(el => { if (el) el.textContent = ''; });
+
+    if (!name || name.value.trim() === '') {
+        markInvalid(name, nameError, 'Please enter your name.');
+        valid = false;
+    }
+
+    if (!email || !isValidEmail(email.value.trim())) {
+        markInvalid(email, emailError, 'Please enter a valid email address.');
+        valid = false;
+    }
+
+    if (!message || message.value.trim() === '') {
+        markInvalid(message, messageError, 'Please enter a message.');
+        valid = false;
+    }
+
+    return valid;
+}
+
+function markInvalid(input, errorEl, msg) {
+    if (input) input.classList.add('is-invalid');
+    if (errorEl) errorEl.textContent = msg;
+}
+
+function isValidEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }

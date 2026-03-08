@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Contact Star City Sealants for concrete repair, decorative flooring, and restoration services in El Paso, Texas.">
-    <title>Contact | Star City Sealants</title>
+    <meta name="description" content="Contact Don Dukes Concrete for concrete repair, decorative flooring, and restoration services in El Paso, Texas.">
+    <title>Contact | Don Dukes Concrete</title>
     <link rel="stylesheet" href="../styles/main.css">
 </head>
 <body>
     <!-- Header -->
     <header class="header">
         <div class="header__inner">
-            <a href="../index.html" class="header__logo">Star City Sealants</a>
+            <a href="../index.html" class="header__logo">Don Dukes Concrete</a>
             <nav class="header__nav">
                 <a href="./about.html" class="header__link">About</a>
                 <a href="./projects.html" class="header__link">Projects</a>
@@ -31,11 +31,14 @@
             <img src="../images/other-images/pexels-errin-casano-2356059.jpg" alt="Construction background">
         </div>
         <div class="contact-hero__overlay"></div>
-        <h1 class="contact-hero__title">We'd Love to<br>Hear From You</h1>
+        <div class="contact-hero__content">
+            <h1 class="contact-hero__title">Let's Talk<br>About Your Project</h1>
+            <p class="contact-hero__subtitle">Reach out directly or send a message below — Don personally responds to every inquiry.</p>
+        </div>
     </section>
 
-    <!-- Contact Cards -->
-    <section class="section">
+    <!-- Contact Info Cards -->
+    <section class="section" style="padding-bottom: 0;">
         <div class="container">
             <div class="contact-grid stagger-children">
                 <!-- Address Card -->
@@ -92,15 +95,99 @@
         </div>
     </section>
 
-    <!-- CTA Section -->
-    <section class="cta">
-        <div class="container">
-            <div class="cta__inner">
-                <div class="cta__text">
-                    <h2>View Our Work</h2>
-                    <p>Browse our portfolio of completed projects.</p>
+    <!-- Contact Form Section -->
+    <section class="section">
+        <div class="container container--narrow">
+            <div class="contact-form-wrapper animate-on-scroll">
+                <div class="contact-form-header">
+                    <span class="services__subtitle">Send a Message</span>
+                    <h2>Tell Us About Your Project</h2>
+                    <p>Whether you have a question or a specific project in mind, Don is ready to help. Fill out the form and he'll be in touch promptly.</p>
                 </div>
-                <a href="./projects.html" class="btn btn--outline">See Projects</a>
+
+                <form class="contact-form" id="contactForm" novalidate>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="name">Your Name <span class="form-required">*</span></label>
+                            <input
+                                class="form-input"
+                                type="text"
+                                id="name"
+                                name="name"
+                                placeholder="John Smith"
+                                required
+                                autocomplete="name"
+                            >
+                            <span class="form-error" id="nameError"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="email">Email Address <span class="form-required">*</span></label>
+                            <input
+                                class="form-input"
+                                type="email"
+                                id="email"
+                                name="email"
+                                placeholder="john@example.com"
+                                required
+                                autocomplete="email"
+                            >
+                            <span class="form-error" id="emailError"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="phone">Phone Number <span class="form-optional">(optional)</span></label>
+                        <input
+                            class="form-input"
+                            type="tel"
+                            id="phone"
+                            name="phone"
+                            placeholder="+1 (915) 555-0000"
+                            autocomplete="tel"
+                        >
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="service">Service Needed</label>
+                        <select class="form-input form-select" id="service" name="service">
+                            <option value="">Select a service (optional)</option>
+                            <option value="concrete-repairs">Concrete Repairs</option>
+                            <option value="decorative-concrete">Decorative Concrete</option>
+                            <option value="historical-restoration">Historical Restoration</option>
+                            <option value="industrial-flooring">Industrial &amp; Commercial Flooring</option>
+                            <option value="joint-sealants">Joint Sealants</option>
+                            <option value="other">Other / Not Sure</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="message">Message <span class="form-required">*</span></label>
+                        <textarea
+                            class="form-input form-textarea"
+                            id="message"
+                            name="message"
+                            rows="6"
+                            placeholder="Tell us about your project — location, scope, timeline, or any questions you have..."
+                            required
+                        ></textarea>
+                        <span class="form-error" id="messageError"></span>
+                    </div>
+                    <button type="submit" class="btn btn--primary form-submit">
+                        Send Message
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                        </svg>
+                    </button>
+                </form>
+
+                <!-- Success Message (hidden by default) -->
+                <div class="form-success" id="formSuccess" style="display: none;">
+                    <div class="form-success__icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
+                        </svg>
+                    </div>
+                    <h3>Message Sent!</h3>
+                    <p>Thanks for reaching out. Don will be in touch with you shortly.</p>
+                    <a href="./projects.html" class="btn btn--primary" style="margin-top: var(--space-lg);">View Our Projects</a>
+                </div>
             </div>
         </div>
     </section>
@@ -108,7 +195,24 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            <p class="footer__text">Website Design: Brandon Dukes</p>
+            <div class="footer__inner">
+                <div class="footer__brand">
+                    <span class="footer__logo">Don Dukes Concrete</span>
+                    <p class="footer__tagline">El Paso's Trusted Concrete Consultant</p>
+                </div>
+                <div class="footer__links">
+                    <a href="./about.html">About</a>
+                    <a href="./projects.html">Projects</a>
+                    <a href="./contact.html">Contact</a>
+                </div>
+                <div class="footer__contact">
+                    <a href="tel:+19152699335">+1 (915) 269-9335</a>
+                    <a href="mailto:don@hondocrete.com">don@hondocrete.com</a>
+                </div>
+            </div>
+            <div class="footer__bottom">
+                <p>© 2024 Don Dukes Concrete. El Paso, TX &nbsp;·&nbsp; Website Design: Brandon Dukes</p>
+            </div>
         </div>
     </footer>
 
